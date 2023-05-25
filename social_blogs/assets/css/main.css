@@ -48,6 +48,21 @@
     cursor: pointer;
 }
 
+.btn-secondary {
+    display: inline-block;
+    margin-bottom: 10px !important;
+    background-color: #ccc;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 20px;
+    text-transform: uppercase;
+    transition: all .3s;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
 .errorlist {
     color: red !important;
     padding-bottom: 10px !important;
@@ -59,4 +74,10 @@
 
 input, textarea {
     text-transform: none !important;
+}
+
+.profile-picture {
+    max-width: 100%;
+    width: 180px;
+    height: 180px;
 }
