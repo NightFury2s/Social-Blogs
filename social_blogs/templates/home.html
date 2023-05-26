@@ -22,13 +22,13 @@
                 </div>
                 <div class="down-content">
                   <span>{{blog.category}}</span>
-                  <a href="#">
+                  <a href="{% url 'blog_details' blog.slug %}">
                     <h4>{{blog.title}}</h4>
                   </a>
                   <ul class="post-info">
                     <li><a href="#">{{blog.user.username}}</a></li>
                     <li><a href="#">{{blog.created_date}}</a></li>
-                    <li><a href="#">{{blog.blog_comments.all.count}} comments</a></li>
+                    <li><a href="#">{{blog.blog_comments.all.count}} bình luận</a></li>
                   </ul>
                   <p>{{blog.description|truncatewords:30}}</p>
                   <div class="post-options">
@@ -45,13 +45,6 @@
                           {% endif %}
                         </ul>
                       </div>
-                      <div class="col-6">
-                        <ul class="post-share">
-                          <li><i class="fa fa-share-alt"></i></li>
-                          <li><a href="#">Facebook</a>,</li>
-                          <li><a href="#"> Twitter</a></li>
-                        </ul>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -60,7 +53,7 @@
             {% endfor %}
             <div class="col-lg-12">
               <div class="main-button">
-                <a href="{% url 'blogs' %}">View All Posts</a>
+                <a href="{% url 'blogs' %}">Xem tất cả Blog</a>
               </div>
             </div>
           </div>

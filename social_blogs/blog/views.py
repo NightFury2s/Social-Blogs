@@ -1,8 +1,11 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import Q
-from .forms import TextForm
+from .forms import TextForm, AddBlogForm
+from django.utils.text import slugify
+from user_profile.models import User
 from .models import(
     Blog,
     Category,
@@ -153,3 +156,45 @@ def search_blogs(request):
 
     else:
         return redirect('home')
+
+@login_required(login_url='login')
+def add_blog(request):
+    form = AddBlogForm()
+
+    if request.method == "POST":
+        form = AddBlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            tags = request.POST['tags'].split(',')
+            user = get_object_or_404(User, pk=request.user.pk)
+            category = get_object_or_404(Category, pk=request.POST['category'])
+            blog = form.save(commit=False)
+            blog.user = user
+            blog.category = category
+            blog.save()
+
+            for tag in tags:
+                tag_input = Tag.objects.filter(
+                    title__iexact=tag.strip(),
+                    slug=slugify(tag.strip())
+                )
+                if tag_input.exists():
+                    t = tag_input.first()
+                    blog.tags.add(t)
+
+                else:
+                    if tag != '':
+                        new_tag = Tag.objects.create(
+                            title=tag.strip(),
+                            slug=slugify(tag.strip())
+                        )
+                        blog.tags.add(new_tag)
+
+            messages.success(request, "Blog added successfully")
+            return redirect('blog_details', slug=blog.slug)
+        else:
+            print(form.errors)
+
+    context = {
+        "form": form
+    }
+    return render(request, 'add_blog.html', context)
